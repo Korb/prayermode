@@ -12,14 +12,10 @@
   <a href="https://github.com/prayermode/prayermode/blob/master/LICENSE">
     <img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="GPLv3 License" />
   </a>
-  '<a href="https://f-droid.org/packages/com.yahyaoui.prayermode/">'
-    '<img src="https://img.shields.io/f-droid/v/com.yahyaoui.prayermode.svg" alt="F-Droid Version" />'
-  '</a>'
 </p>
 
 ## 📋 Table of Contents
 - [Features](#-features)
-'- [Download & Install](#-download--install)'
 - [Permissions Explained](#-permissions-explained)
 - [Privacy Policy](#-privacy-policy)
 - [Building from Source](#-building-from-source)
@@ -52,16 +48,6 @@ Set it once, the app does the rest! It works automatically in the background, ke
 *   Open Source & Transparent: Every line of code is public for full transparency and trust.
 *   Privacy First: No tracking, no ads, no data collection. Your location and data never leave your device.
 *   Lightweight: Minimal battery and data usage.
-
-'## 📥 Download & Install'
-
-'### Official F-Droid Repository (Recommended)'
-'The easiest and most secure way to get Prayer mode is through the official F-Droid repository. This ensures you get automatic updates and a build that matches the public source code.'
-
-'[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" height="80">](https://f-droid.org/packages/com.yahyaoui.prayermode/)'
-
-'### Manual Installation'
-'You can also download the latest APK directly from the [Releases](https://github.com/prayermode/prayermode/releases) page. Please note that for security, you should only install APKs from trusted sources.'
 
 ## 🔐 Permissions Explained
 
