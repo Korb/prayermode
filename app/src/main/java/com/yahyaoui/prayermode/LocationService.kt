@@ -14,7 +14,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.os.Looper
-import android.os.SystemClock
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
@@ -123,9 +122,10 @@ class LocationService : Service(), CoroutineScope {
         launch {
             locationMutex.withLock {
                 val locationAge = System.currentTimeMillis() - newLocation.time
-                if (locationAge > MAX_LOCATION_AGE_MS || !isLocationAccurate(newLocation))
+                if (locationAge > MAX_LOCATION_AGE_MS || !isLocationAccurate(newLocation)) {
+                    if (BuildConfig.DEBUG) Log.w(tag, "Rejecting stale/inaccurate location...")
                     return@withLock
-
+                }
                 val lastFetchLatitude = sharedHelper.getDouble(PREF_LAST_FETCH_LATITUDE, Double.NaN)
                 val lastFetchLongitude = sharedHelper.getDouble(PREF_LAST_FETCH_LONGITUDE, Double.NaN)
                 val lastFetchTimeMs = sharedHelper.getLong(PREF_LAST_FETCH_TIME_MS, 0L)
@@ -139,10 +139,16 @@ class LocationService : Service(), CoroutineScope {
                 }
 
                 val displacementKm = lastFetchLocation.distanceTo(newLocation).div(1000)
-                val timeSinceLastFetchMs = SystemClock.elapsedRealtime() - lastFetchTimeMs
+                val timeSinceLastFetchMs = System.currentTimeMillis() - lastFetchTimeMs
+
+                if (timeSinceLastFetchMs < 0) {
+                    if (BuildConfig.DEBUG) Log.w(tag, "Negative time detected. Resetting last fetch time.")
+                    triggerPrayerTimesFetch(newLocation, 0f)
+                    return@withLock
+                }
 
                 if (BuildConfig.DEBUG) {
-                    val timePassedMinutes = timeSinceLastFetchMs.toFloat() / (60 * 1000)
+                    val timePassedMinutes = timeSinceLastFetchMs / (60 * 1000f)
                     val locationAge = System.currentTimeMillis() - newLocation.time
                     Log.d(tag, "--- Location Update Check ---")
                     Log.d(tag, "New Location: Lat=${"%.4f".format(newLocation.latitude)}, Lon=${"%.4f".format(newLocation.longitude)}, " + "Acc=${"%.1f".format(newLocation.accuracy)}m, Age=${(locationAge / 1000).toInt()}s")
@@ -166,7 +172,7 @@ class LocationService : Service(), CoroutineScope {
             return false
         }
 
-        val timeHours = timeMs.toFloat() / (60 * 60 * 1000)
+        val timeHours = timeMs / (60 * 60 * 1000f)
         val speed = displacementKm / timeHours
         if (BuildConfig.DEBUG) {
             Log.d(tag, "Calculated speed: %.1f km/h".format(speed))

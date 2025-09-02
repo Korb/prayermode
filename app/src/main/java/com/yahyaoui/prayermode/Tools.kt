@@ -39,7 +39,6 @@ import org.json.JSONException
 import kotlin.math.pow
 import android.Manifest
 import android.os.Build
-import android.os.SystemClock
 import com.yahyaoui.prayermode.LocationService.Companion.PREF_LAST_FETCH_TIME_MS
 import java.text.ParseException
 import android.text.format.DateFormat
@@ -278,7 +277,7 @@ class Tools(private val context: Context) {
             file.writeText(data)
             if (BuildConfig.DEBUG) Log.d(tag, "Data successfully written to file: ${file.absolutePath}")
             processPrayerTimes()
-            sharedHelper.saveLong(PREF_LAST_FETCH_TIME_MS,SystemClock.elapsedRealtime())
+            sharedHelper.saveLong(PREF_LAST_FETCH_TIME_MS, System.currentTimeMillis())
         } catch (e: IOException) {
             NotificationHelper.sendNotification(context, R.string.fetch_title, R.string.failed_writing, 440, "")
             Log.e(tag, "Failed to write to file: ${e.message}",e)
