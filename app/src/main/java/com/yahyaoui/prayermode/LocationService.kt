@@ -43,11 +43,11 @@ class LocationService : Service(), CoroutineScope {
         const val PREF_LAST_FETCH_LATITUDE = "last_fetch_latitude"
         const val PREF_LAST_FETCH_LONGITUDE = "last_fetch_longitude"
         const val PREF_LAST_FETCH_TIME_MS = "last_fetch_time_ms"
-        private const val MIN_DISPLACEMENT_KM = 25f
+        private const val SIGNIFICANT_DISPLACEMENT_KM = 25f
         private const val MAX_LOCATION_AGE_MS = 30 * 60000L
         private const val MIN_LOCATION_ACCURACY_METERS = 100f
-        private const val LOCATION_UPDATE_INTERVAL_MS = 30 * 60000L
-        private const val LOCATION_UPDATE_DISTANCE_METERS = 500f
+        private const val LOCATION_UPDATE_INTERVAL_MS = 15 * 60000L
+        private const val LOCATION_UPDATE_DISTANCE_METERS = 250f
     }
 
     override fun onCreate() {
@@ -132,6 +132,7 @@ class LocationService : Service(), CoroutineScope {
 
                 if (lastFetchLatitude.isNaN() || lastFetchLongitude.isNaN() || lastFetchTimeMs == 0L) {
                     if (BuildConfig.DEBUG) Log.i(tag, "Initial state or invalid data detected.")
+                    triggerPrayerTimesFetch(newLocation, 0f)
                     return@withLock
                 }
 
@@ -141,53 +142,24 @@ class LocationService : Service(), CoroutineScope {
                 }
 
                 val displacementKm = lastFetchLocation.distanceTo(newLocation).div(1000)
-                val timeSinceLastFetchMs = System.currentTimeMillis() - lastFetchTimeMs
-
-                if (timeSinceLastFetchMs < 0) {
-                    if (BuildConfig.DEBUG) Log.w(tag, "Negative time detected. Resetting last fetch time.")
-                    triggerPrayerTimesFetch(newLocation, 0f)
-                    return@withLock
-                }
 
                 if (BuildConfig.DEBUG) {
-                    val timePassedMinutes = timeSinceLastFetchMs / (60 * 1000f)
                     val locationAge = System.currentTimeMillis() - newLocation.time
                     Log.d(tag, "--- Location Update Check ---")
                     Log.d(tag, "New Location: Lat=${"%.4f".format(newLocation.latitude)}, Lon=${"%.4f".format(newLocation.longitude)}, " + "Acc=${"%.1f".format(newLocation.accuracy)}m, Age=${(locationAge / 1000).toInt()}s")
                     Log.d(tag, "Last Fetch Data from SharedPreferences: Lat: ${"%.4f".format(lastFetchLatitude)}, Lon: ${"%.4f".format(lastFetchLongitude)}")
-                    Log.i(tag, "Calculated Values:")
-                    Log.i(tag, "- Displacement: ${"%.1f".format(displacementKm)} km")
-                    Log.i(tag, "- Time passed since last fetch: ${"%.2f".format(timePassedMinutes)} minutes")
-                    Log.i(tag, "--- End of Check ---")
+                    Log.d(tag, "- Displacement from last fetch: ${"%.1f".format(displacementKm)} km")
+                    Log.d(tag, "--- End of Check ---")
                 }
-                val shouldTrigger = displacementKm >= MIN_DISPLACEMENT_KM &&
-                        (isSignificantMove(displacementKm, timeSinceLastFetchMs) || displacementKm > 100)
-                if (shouldTrigger) triggerPrayerTimesFetch(newLocation, displacementKm)
+
+                if (displacementKm >= SIGNIFICANT_DISPLACEMENT_KM && newLocation.accuracy <= MIN_LOCATION_ACCURACY_METERS) {
+                    if (BuildConfig.DEBUG) Log.i(tag, "Significant displacement with good accuracy. Fetching prayer times.")
+                    triggerPrayerTimesFetch(newLocation, displacementKm)
+                } else if (displacementKm >= SIGNIFICANT_DISPLACEMENT_KM) {
+                    if (BuildConfig.DEBUG) Log.w(tag, "Significant displacement detected but accuracy is poor. Waiting for better fix.")
+                }
             }
         }
-    }
-
-    private fun isSignificantMove(displacementKm: Float, timeMs: Long): Boolean {
-        if (timeMs < 360000L) {
-            if (BuildConfig.DEBUG) Log.w(tag, "Movement rejected: Time is too short (< 6 minutes).")
-            return false
-        }
-
-        val timeHours = timeMs / (60 * 60 * 1000f)
-        val speed = displacementKm / timeHours
-        if (BuildConfig.DEBUG) {
-            Log.d(tag, "Calculated speed: %.1f km/h".format(speed))
-            NotificationHelper.sendNotification(this@LocationService, R.string.location_title, R.string.speed, 335, "%.1f".format(speed))
-        }
-
-        if (speed > 1000) {
-            if (BuildConfig.DEBUG) Log.w(tag, "Movement rejected: Speed is implausibly high (> 1000 km/h).")
-            return false
-        }
-
-        val isSignificant = speed in 3.5f..300f
-        if (BuildConfig.DEBUG) Log.w(tag, "Movement rejected: Speed %.1f km/h is not realistic for travel (3.5-300 km/h required).".format(speed))
-        return isSignificant
     }
 
     private fun triggerPrayerTimesFetch(currentLocation: Location, distance: Float) {
@@ -210,7 +182,8 @@ class LocationService : Service(), CoroutineScope {
                         tools.cancelAllSilentModes()
                         tools.cancelScheduledSilentMode()
                         AlarmScheduler(applicationContext).scheduleDailyAlarm()
-                        saveFetchData(currentLocation)
+                        sharedHelper.saveDouble(PREF_LAST_FETCH_LATITUDE, currentLocation.latitude)
+                        sharedHelper.saveDouble(PREF_LAST_FETCH_LONGITUDE, currentLocation.longitude)
                     } else Log.e(tag, "Prayer times fetch failed")
                 }
             } catch (e: Exception) {
@@ -247,11 +220,6 @@ class LocationService : Service(), CoroutineScope {
                 Looper.getMainLooper()
             )
         }
-    }
-
-    private fun saveFetchData(location: Location) {
-        sharedHelper.saveDouble(PREF_LAST_FETCH_LATITUDE, location.latitude)
-        sharedHelper.saveDouble(PREF_LAST_FETCH_LONGITUDE, location.longitude)
     }
 
     private fun isLocationAccurate(location: Location): Boolean {
