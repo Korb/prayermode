@@ -1,5 +1,5 @@
 [versions]
-activityKtx = "1.10.1"
+activityKtx = "1.11.0"
 agp = "8.10.1"
 coreKtx = "1.17.0"
 cardviewVersion = "1.0.0"
@@ -13,14 +13,14 @@ espressoCore = "3.7.0"
 kotlinStdlib = "2.1.0"
 kotlinxCoroutinesAndroid = "1.8.1"
 kotlinxCoroutinesCore = "1.8.1"
-lifecycleRuntimeKtx = "2.9.3"
-activityCompose = "1.10.1"
-composeBom = "2025.08.01"
+lifecycleRuntimeKtx = "2.9.4"
+activityCompose = "1.11.0"
+composeBom = "2025.09.00"
 appcompat = "1.7.1"
-material = "1.12.0"
+material = "1.13.0"
 okhttp = "4.9.1"
-workRuntimeKtx = "2.10.3"
-lifecycleProcess = "2.9.3"
+workRuntimeKtx = "2.10.4"
+lifecycleProcess = "2.9.4"
 
 [libraries]
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }
@@ -55,4 +55,3 @@ androidx-lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-p
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-plugin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-

@@ -46,7 +46,7 @@ class LocationService : Service(), CoroutineScope {
         private const val SIGNIFICANT_DISPLACEMENT_KM = 25f
         private const val MAX_LOCATION_AGE_MS = 30 * 60000L
         private const val MIN_LOCATION_ACCURACY_METERS = 100f
-        private const val LOCATION_UPDATE_INTERVAL_MS = 15 * 60000L
+        private const val LOCATION_UPDATE_INTERVAL_MS = 20 * 60000L
         private const val LOCATION_UPDATE_DISTANCE_METERS = 250f
     }
 
