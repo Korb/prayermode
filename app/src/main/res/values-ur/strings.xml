@@ -3,6 +3,7 @@
     <string name="Off">بند</string>
     <string name="On">چالو</string>
     <string name="select_option">ایک اختیار منتخب کریں</string>
+    <string name="AudioText">خاموش موڈ آن کرنے سے پہلے تکبیر سنیں</string>
 
     <!-- Daily Schedule Card view -->
     <string name="daily_schedule">روزانہ کے نماز کا شیڈول</string>
@@ -323,6 +324,8 @@
     <string name="fetch_failed">نماز کے اوقات حاصل کرتے وقت ایک غیر متوقع خرابی پیش آئی۔ براہ کرم سوئچ کو بند اور دوبارہ چالو کریں۔</string>
     <string name="schedule_title">نماز کے اوقات کا جدول</string>
 
+    <string name="background_location_rationale">جب آپ کسی نئی جگہ سفر کرتے ہیں، تو نماز کے اوقات اور سائلنٹ موڈ کے شیڈول کو خودکار طریقے سے اپ ڈیٹ کرنے کے لیے، تاکہ آپ کا فون ایپلیکیشن کھولے بغیر ہمیشہ صحیح وقت پر خاموش رہے۔</string>
+
     <!-- Catch & else blocks -->
     <string name="failed_writing">براہ کرم یقینی بنائیں کہ آپ کے پاس کافی اسٹوریج جگہ ہے۔</string>
     <string name="permission_denied_writing">نماز کے اوقات کی فائل کو محفوظ کرتے وقت ایک غیر متوقع خرابی پیش آگئی ہے۔ براہ کرم ایپ کو دوبارہ شروع کریں اور اپ ڈیٹس چیک کریں۔</string>
@@ -331,7 +334,6 @@
     <string name="silent_schedule_success">آج کا شیڈول کامیابی سے سیٹ ہو گیا۔</string>
     <string name="monthly_update">اس مہینے کے نماز کے اوقات کو اپ ڈیٹ کیا جا رہا ہے: %1$s۔</string>
     <string name="monthly_update_default_method">اس مہینے کے نماز کے اوقات (%1$s) ڈیفالٹ طریقے سے اپ ڈیٹ کیے جا رہے ہیں۔</string>
-    <string name="speed">You travelled at %1$s km/h.</string>
 
     <string name="worker_failed">Worker failed.</string>
     <string name="process_prayer">Process prayer times</string>

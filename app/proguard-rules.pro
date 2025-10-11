@@ -29,6 +29,8 @@
 -keep public class com.yahyaoui.prayermode.MainActivity
 -keep public class com.yahyaoui.prayermode.SelectionActivity
 -keep public class com.yahyaoui.prayermode.InformationActivity
+-keep public class com.yahyaoui.prayermode.TermsAndConditions
+-keep public class com.yahyaoui.prayermode.dialogs.** { *; }
 
 -keep public class com.yahyaoui.prayermode.LocationService {
     public <init>();
@@ -54,6 +56,7 @@
 -keep public class * extends android.content.BroadcastReceiver
 -keep public class * extends android.content.ContentProvider
 -keep public class * extends android.app.Application
+-keep public class * extends android.service.quicksettings.TileService
 
 # ========== Views & Resources ==========
 -keepclassmembers class * extends android.view.View {
@@ -69,24 +72,30 @@
 -keep class androidx.compose.ui.platform.AndroidComposeView { *; }
 
 # ========== WorkManager ==========
--keep class androidx.work.** { *; }
--keepclassmembers class * extends androidx.work.Worker {
-    public <init>(android.content.Context, android.util.AttributeSet);
-}
+#-keep class androidx.work.** { *; }
+-keep class com.yahyaoui.prayermode.SilentModeWorker { *; }
+#-keepclassmembers class * extends androidx.work.Worker {
+#    public <init>(android.content.Context, android.util.AttributeSet);
+#}
 
 # ========== OkHttp ==========
--keep class okhttp3.** { *; }
+#-keep class okhttp3.** { *; }
+-keep class okhttp3.internal.publicsuffix.PublicSuffixDatabase
+-keep class okhttp3.internal.platform.Platform
 -dontwarn okhttp3.**
 -keep interface okhttp3.internal.** { *; }
 
 # ========== Kotlin Coroutines ==========
--keep class kotlinx.coroutines.** { *; }
+#-keep class kotlinx.coroutines.** { *; }
 -keepclassmembers class kotlinx.coroutines.internal.DispatchedContinuation {
     *;
 }
 
 # ========== ICU4J ==========
--keep class com.ibm.icu.** { *; }
+#-keep class com.ibm.icu.** { *; }
+-keep class com.ibm.icu.util.Calendar { *; }
+-keep class com.ibm.icu.text.DateFormat { *; }
+-keep class com.ibm.icu.util.IslamicCalendar { *; }
 -dontwarn com.ibm.icu.**
 
 # ========== General Rules ==========

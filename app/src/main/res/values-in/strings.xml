@@ -3,6 +3,7 @@
     <string name="Off">Nonaktif</string>
     <string name="On">Aktif</string>
     <string name="select_option">Pilih Opsi</string>
+    <string name="AudioText">Dengarkan takbir sebelum mengaktifkan mode diam</string>
 
     <!-- Daily Schedule Card view -->
     <string name="daily_schedule">Jadwal Sholat Harian</string>
@@ -320,6 +321,8 @@ Anda dapat menyumbang menggunakan [DONATION_LINK].<br/><br/>
     <string name="fetch_failed">Terjadi kesalahan tak terduga. Harap matikan dan nyalakan kembali saklar.</string>
     <string name="schedule_title">Jadwal waktu sholat</string>
 
+    <string name="background_location_rationale">Untuk memperbarui jadwal Mode Senyap dan waktu salat secara otomatis saat Anda bepergian ke lokasi baru, memastikan ponsel Anda selalu dibisukan pada waktu yang tepat tanpa perlu membuka aplikasi.</string>
+
     <!-- Catch & else blocks -->
     <string name="failed_writing">Pastikan ruang penyimpanan mencukupi.</string>
     <string name="permission_denied_writing">Terjadi kesalahan tak terduga saat menyimpan file jadwal shalat. Silakan mulai ulang aplikasi dan periksa pembaruan.</string>
@@ -328,7 +331,6 @@ Anda dapat menyumbang menggunakan [DONATION_LINK].<br/><br/>
     <string name="silent_schedule_success">Penjadwalan hari ini berhasil.</string>
     <string name="monthly_update">Memperbarui waktu sholat bulan %1$s.</string>
     <string name="monthly_update_default_method">Memperbarui waktu sholat bulan %1$s menggunakan metode default.</string>
-    <string name="speed">You travelled at %1$s km/h.</string>
 
     <string name="worker_failed">Worker failed.</string>
     <string name="process_prayer">Process prayer times</string>

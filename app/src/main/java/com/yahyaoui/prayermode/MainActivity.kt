@@ -71,6 +71,9 @@ class MainActivity : AppCompatActivity(), TermsAndConditionsListener {
     private lateinit var helpContainer: MaterialCardView
     private lateinit var donationContainer: MaterialCardView
 
+    private lateinit var audioSwitch: SwitchCompat
+    private lateinit var audioSwitchContainer: View
+
     private val tools : Tools by lazy { Tools(this) }
     private val sharedHelper: SharedHelper by lazy { SharedHelper(this) }
     private val permissionsHelper: PermissionsHelper by lazy { PermissionsHelper(this) }
@@ -177,6 +180,8 @@ class MainActivity : AppCompatActivity(), TermsAndConditionsListener {
         permissionsContainer = findViewById(R.id.permissionsContainer)
         helpContainer = findViewById(R.id.helpContainer)
         donationContainer = findViewById(R.id.donationContainer)
+        audioSwitch = findViewById(R.id.audioSwitch)
+        audioSwitchContainer  = findViewById(R.id.audioSwitchContainer)
 
         titlePadding()
         layoutDirection()
@@ -212,6 +217,12 @@ class MainActivity : AppCompatActivity(), TermsAndConditionsListener {
             if (isRestoringSwitchState) return@setOnCheckedChangeListener
             sharedHelper.saveSwitchState(isChecked)
             if (isChecked) switchOn() else switchOff()
+        }
+
+        audioSwitchContainer.setOnClickListener { audioSwitch.toggle() }
+        audioSwitch.setOnCheckedChangeListener { _, isChecked ->
+            sharedHelper.saveAudioSwitchState(isChecked)
+            if (BuildConfig.DEBUG) Log.d(tag, "Audio takbir changed to: $isChecked")
         }
 
         handleContainerClick(calculationMethodsContainer, R.string.select_calculation_method, R.array.calculation_methods, SharedHelper.SELECTED_METHOD_RES_ID, 0, calculationMethodLauncher)
@@ -314,11 +325,13 @@ class MainActivity : AppCompatActivity(), TermsAndConditionsListener {
         tvTahajjud.text = sharedHelper.getStringFromArray(R.array.tahajjud_duration, SharedHelper.DURATION_TAHAJJUD, 4)
         tvEidTime.text = sharedHelper.getStringFromArray(R.array.eid_time, SharedHelper.SELECTED_TIME_EID, 0)
         tvEidDuration.text = sharedHelper.getStringFromArray(R.array.eid_duration, SharedHelper.DURATION_EID, 1)
+        audioSwitch.isChecked = sharedHelper.getAudioSwitchState()
     }
 
     override fun onPause() {
         super.onPause()
         sharedHelper.saveSwitchState(activateSwitch.isChecked)
+        sharedHelper.saveAudioSwitchState(audioSwitch.isChecked)
         unregisterReceiver(dndStateReceiver)
         if (BuildConfig.DEBUG) Log.d(tag, "Switch state saved in onPause: ${activateSwitch.isChecked}")
     }

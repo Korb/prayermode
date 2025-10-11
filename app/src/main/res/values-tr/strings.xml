@@ -3,6 +3,7 @@
     <string name="Off">Kapalı</string>
     <string name="On">Açık</string>
     <string name="select_option">Bir seçenek belirleyin</string>
+    <string name="AudioText">Sessiz modu etkinleştirmeden önce tekbiri dinle</string>
 
     <!-- Daily Schedule Card view -->
     <string name="daily_schedule">Günlük Namaz Vakitleri</string>
@@ -177,7 +178,7 @@ Gizliliğinizi korumaya kararlıyız. Gizlilik uygulamalarımızla ilgili sorula
 Gizlilik Politikamızın tüm detayları için lütfen [PRIVACY_LINK].<br/><br/>
 Uygulamamıza güvendiğiniz için teşekkür ederiz.<br/><br/>
 ]]></string>
-    <string name="terms">Terms of Service</string>
+    <string name="terms">Hizmet Şartları</string>
 
     <string name="permission">İzinler</string>
     <string name="permissions_content">İzin Gerekli</string>
@@ -320,6 +321,8 @@ Bağışlar, sadece takdirinizi göstermenin ve uygulamanın herkes için ücret
     <string name="fetch_failed">Namaz vakitleri alınırken beklenmeyen bir hata oluştu. Lütfen anahtarı kapatıp yeniden açın.</string>
     <string name="schedule_title">Namaz vakitleri takvimi</string>
 
+    <string name="background_location_rationale">Yeni bir konuma seyahat ettiğinizde Namaz Vakti ve Sessiz Modu otomatik olarak güncellemek ve telefonunuzun uygulamayı açmanıza gerek kalmadan her zaman doğru zamanda sessize alınmasını sağlamak için.</string>
+
     <!-- Catch & else blocks -->
     <string name="failed_writing">Lütfen yeterli depolama alanınız olduğundan emin olun.</string>
     <string name="permission_denied_writing">Namaz vakitleri dosyası kaydedilirken beklenmeyen bir hata oluştu. Lütfen uygulamayı yeniden başlatın ve güncellemeleri kontrol edin.</string>
@@ -328,7 +331,6 @@ Bağışlar, sadece takdirinizi göstermenin ve uygulamanın herkes için ücret
     <string name="silent_schedule_success">Bugünkü programlama başarılı.</string>
     <string name="monthly_update">Bu ay için namaz vakitleri güncelleniyor: %1$s.</string>
     <string name="monthly_update_default_method">Bu ay için namaz vakitleri varsayılan yöntemle güncelleniyor: %1$s.</string>
-    <string name="speed">You travelled at %1$s km/h.</string>
 
     <string name="worker_failed">Worker failed.</string>
     <string name="process_prayer">Process prayer times</string>

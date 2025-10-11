@@ -3,6 +3,7 @@
     <string name="Off">Off</string>
     <string name="On">On</string>
     <string name="select_option">Select an option</string> <!-- No translation -->
+    <string name="AudioText">Listen to takbir before activating silent mode</string>
 
     <!-- Daily Schedule Card view -->
     <string name="daily_schedule">Daily Prayer Schedule</string>
@@ -324,6 +325,8 @@ Thank you for trusting our application.<br/><br/>
     <string name="fetch_failed">An unexpected error occurred while fetching prayer times. Please try turning the switch off and back on.</string>
     <string name="schedule_title">Prayer times schedule</string>
 
+    <string name="background_location_rationale">To automatically update Silent Mode schedules and prayer times when you travel to a new location, ensuring your phone is always silenced at the correct time without needing to open the app.</string>
+
     <!-- Catch & else blocks -->
     <string name="failed_writing">Please ensure you have sufficient storage space.</string>
     <string name="permission_denied_writing">An unexpected error occurred saving prayer times file, please restart the app and check for updates.</string>
@@ -332,7 +335,6 @@ Thank you for trusting our application.<br/><br/>
     <string name="silent_schedule_success">Successful today scheduling.</string>
     <string name="monthly_update">Updating prayer times for %1$s.</string>
     <string name="monthly_update_default_method">Updating prayer times for %1$s using default method.</string>
-    <string name="speed">You travelled at %1$s km/h.</string>
 
     <string name="worker_failed">Worker failed.</string>
     <string name="process_prayer">Process prayer times</string>

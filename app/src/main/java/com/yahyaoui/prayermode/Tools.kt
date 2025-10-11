@@ -52,6 +52,8 @@ class Tools(private val context: Context) {
     private val pendingIntentMap = HashMap<String, PendingIntent>()
     private val prayerNames = listOf("Fajr", "Dhuhr", "Asr", "Maghrib", "Isha","Taraweeh", "Tahajjud", "Joumoua","Eid")
     private var isExitSilent = false
+    private val audioPlayerHelper by lazy { AudioPlayerHelper(context) }
+    private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     private val prayerNameMap = mapOf(
         "Eid" to R.string.eid,
@@ -166,7 +168,6 @@ class Tools(private val context: Context) {
         }
 
         try {
-            var bestLocation: Location? = null
             val gpsLocation = if (hasFineLocation && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
             } else null
@@ -175,14 +176,13 @@ class Tools(private val context: Context) {
                 locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
             } else null
 
-            bestLocation = if (gpsLocation != null && networkLocation != null) {
+            val bestLocation: Location? = if (gpsLocation != null && networkLocation != null) {
                 if (gpsLocation.time > networkLocation.time) gpsLocation else networkLocation
             } else gpsLocation ?: networkLocation
 
             if (BuildConfig.DEBUG) {
-                if (bestLocation != null) {
-                    if (BuildConfig.DEBUG) Log.d(tag, "Last location fetched: ${bestLocation.latitude}, ${bestLocation.longitude}")
-                } else Log.w(tag, "No last known location found.")
+                if (bestLocation != null) Log.d(tag, "Last location fetched: ${bestLocation.latitude}, ${bestLocation.longitude}")
+                else Log.w(tag, "No last known location found.")
             }
 
             cont.resume(bestLocation)
@@ -234,13 +234,13 @@ class Tools(private val context: Context) {
                         return
                     }
 
-                    val responseBody = res.body?.string()
-                    if (responseBody != null) {
+                    val responseBody: String? = res.body.string()
+                    if (responseBody.isNullOrEmpty()) {
+                        Log.e(tag, "Prayer times response body is null/empty for URL: ${request.url}. Fetch failed.")
+                        NotificationHelper.sendNotification(context, R.string.fetch_title, R.string.fetch_failed, 50, "")
+                    } else {
                         if (BuildConfig.DEBUG) Log.i(tag, "Prayer times fetched successfully on attempt ${attempt + 1}/3 for URL: ${request.url}")
                         writeToFile(responseBody)
-                    } else {
-                        Log.e(tag, "Prayer times response body is null for URL: ${request.url}. Fetch failed.")
-                        NotificationHelper.sendNotification(context, R.string.fetch_title, R.string.fetch_failed, 50, "")
                     }
                 }
             }
@@ -332,7 +332,6 @@ class Tools(private val context: Context) {
                 val sunriseTime = prayerTimes.optString("Sunrise")
                 val imsakTime = prayerTimes.optString("Imsak")
                 val currentTime = Calendar.getInstance()
-
                 if (currentWeekday == "Friday") {
                     if (!pendingIntentMap.containsKey(dhuhrTime)) {
                         val dhuhrCalendar = getPrayerCalendar(dhuhrTime)
@@ -647,26 +646,14 @@ class Tools(private val context: Context) {
                     NotificationHelper.sendNotification(context, R.string.schedule_title, R.string.dnd_already_on, 210, translatedPrayerName)
                     true
                 } else {
-                    sharedHelper.saveIntValue("music_volume", audioManager.getStreamVolume(AudioManager.STREAM_MUSIC))
-                    sharedHelper.saveIntValue("notification_volume", audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION))
-                    sharedHelper.saveIntValue("ring_volume", audioManager.getStreamVolume(AudioManager.STREAM_RING))
-                    sharedHelper.saveIntValue("system_volume", audioManager.getStreamVolume(AudioManager.STREAM_SYSTEM))
-                    if (BuildConfig.DEBUG) Log.i(tag, "Current volumes saved before DND activation.")
-
-                    audioManager.ringerMode = AudioManager.RINGER_MODE_SILENT
-                    notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALARMS)
-                    if (BuildConfig.DEBUG) Log.i(tag, "Setting DND/Silent, voice call volume is active.")
-
-                    audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0)
-                    audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, 0, 0)
-                    audioManager.setStreamVolume(AudioManager.STREAM_RING, 0, 0)
-                    audioManager.setStreamVolume(AudioManager.STREAM_SYSTEM, 0, 0)
-                    if (BuildConfig.DEBUG) Log.i(tag, "Music, Notification, Ring & System volumes are muted")
-
-                    sharedHelper.saveBoolean(SharedHelper.IS_APP_CONTROLLED_DND_ACTIVE, true)
-                    if (BuildConfig.DEBUG) Log.i(tag, "Saved IS_APP_CONTROLLED_DND_ACTIVE as TRUE, App controls DND.")
-
-                    NotificationHelper.sendNotification(context, R.string.schedule_title, R.string.silent_mode_activated_for, 220, translatedPrayerName)
+                    if (sharedHelper.getAudioSwitchState() && sharedHelper.getSwitchState() && prayerName != "Joumoua") {
+                        if (BuildConfig.DEBUG) Log.i(tag, "Audio switch and main switch are on, not Joumoua prayer, playing audio...")
+                        playAudioAndActivateDND(notificationManager, audioManager, translatedPrayerName)
+                    }
+                    else {
+                        if (BuildConfig.DEBUG) Log.i(tag, "Audio switch is off, no audio playing, activating DND")
+                        activateDNDAfterAudio(notificationManager, audioManager, prayerName)
+                    }
                     true
                 }
             } else {
@@ -704,6 +691,44 @@ class Tools(private val context: Context) {
             Log.e(tag, "An unexpected error occurred in setSilentMode: ${e.message}", e)
             if (BuildConfig.DEBUG) NotificationHelper.sendNotification(context, R.string.error, R.string.failed_schedule_silent_mode, 451, "${e.message}")
             return false
+        }
+    }
+    private fun playAudioAndActivateDND(notificationManager: NotificationManager, audioManager: AudioManager, prayerName: String) {
+        coroutineScope.launch(Dispatchers.IO) {
+            try {
+                audioPlayerHelper.playAudioFromRaw(R.raw.takbir)
+                if (BuildConfig.DEBUG) Log.d(tag, "Audio finished, now activating DND")
+                activateDNDAfterAudio(notificationManager, audioManager, prayerName)
+            } catch (e: Exception) {
+                Log.e(tag, "Error during audio/DND sequence: ${e.message}", e)
+                activateDNDAfterAudio(notificationManager, audioManager, prayerName)
+            }
+        }
+    }
+    private fun activateDNDAfterAudio(notificationManager: NotificationManager, audioManager: AudioManager, prayerName: String) {
+        try {
+            sharedHelper.saveIntValue("music_volume", audioManager.getStreamVolume(AudioManager.STREAM_MUSIC))
+            sharedHelper.saveIntValue("notification_volume", audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION))
+            sharedHelper.saveIntValue("ring_volume", audioManager.getStreamVolume(AudioManager.STREAM_RING))
+            sharedHelper.saveIntValue("system_volume", audioManager.getStreamVolume(AudioManager.STREAM_SYSTEM))
+            if (BuildConfig.DEBUG) Log.i(tag, "Current volumes saved before DND activation.")
+
+            audioManager.ringerMode = AudioManager.RINGER_MODE_SILENT
+            notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALARMS)
+            if (BuildConfig.DEBUG) Log.i(tag, "Setting DND/Silent, voice call volume is active.")
+
+            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0)
+            audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, 0, 0)
+            audioManager.setStreamVolume(AudioManager.STREAM_RING, 0, 0)
+            audioManager.setStreamVolume(AudioManager.STREAM_SYSTEM, 0, 0)
+            if (BuildConfig.DEBUG) Log.i(tag, "Music, Notification, Ring & System volumes are muted")
+
+            sharedHelper.saveBoolean(SharedHelper.IS_APP_CONTROLLED_DND_ACTIVE, true)
+            if (BuildConfig.DEBUG) Log.i(tag, "Saved IS_APP_CONTROLLED_DND_ACTIVE as TRUE, App controls DND.")
+
+            NotificationHelper.sendNotification(context, R.string.schedule_title, R.string.silent_mode_activated_for, 220, prayerName)
+        } catch (e: Exception) {
+            Log.e(tag, "Error activating DND after audio: ${e.message}", e)
         }
     }
 

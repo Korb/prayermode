@@ -23,6 +23,8 @@ class SharedHelper(private val context: Context) {
         const val DURATION_EID = "DurationEid"
         const val KEY_TERMS_ACCEPTED = "terms_accepted"
         const val IS_APP_CONTROLLED_DND_ACTIVE = "is_app_controlled_dnd_active"
+        const val AUDIO_SWITCH_STATE_KEY = "audio_switch_state"
+
     }
 
     fun saveSwitchState(state: Boolean) {
@@ -31,6 +33,14 @@ class SharedHelper(private val context: Context) {
 
     fun getSwitchState(): Boolean {
         return sharedPreferences.getBoolean(SWITCH_STATE_KEY, false)
+    }
+
+    fun saveAudioSwitchState(state: Boolean) {
+        sharedPreferences.edit { putBoolean(AUDIO_SWITCH_STATE_KEY, state) }
+    }
+
+    fun getAudioSwitchState(): Boolean {
+        return sharedPreferences.getBoolean(AUDIO_SWITCH_STATE_KEY, false)
     }
 
     fun saveIntValue(key: String, value: Int) {

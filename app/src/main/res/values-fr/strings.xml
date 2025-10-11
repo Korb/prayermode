@@ -3,6 +3,7 @@
     <string name="Off">Désactivé</string>
     <string name="On">Activé</string>
     <string name="select_option">Selectionner une option</string>
+    <string name="AudioText">Ecouter le takbir avant d\'activer le mode silencieux</string>
 
     <!-- Daily Schedule Cardview -->
     <string name="daily_schedule">Programmation Quotidienne</string>
@@ -182,7 +183,7 @@ Pour plus de détails sur notre Politique de Confidentialité, veuillez suivre [
 
 Nous vous remercions pour la confiance que vous accordez à notre application.<br/><br/>
 ]]></string>
-    <string name="terms">Terms of Service</string>
+    <string name="terms">Conditions d\'utilisation</string>
 
     <string name="permission">Permissions</string>
     <string name="permissions_content">Autorisations requises</string>
@@ -326,6 +327,8 @@ Vous pouvez faire un don en utilisant [DONATION_LINK].<br/><br/>
     <string name="fetch_failed">Une erreur inattendue s\'est produite lors de la MàJ des heures de prières. Veuillez désactiver puis réactiver l\'interrupteur.</string>
     <string name="schedule_title">Planning horaires des prières</string>
 
+    <string name="background_location_rationale">Pour mettre à jour automatiquement les horaires de prière et le mode Silencieux lorsque vous voyagez vers un nouvel emplacement, garantissant que votre téléphone est toujours silencieux à la bonne heure sans avoir à ouvrir l\'appli.</string>
+
     <!-- Catch & blocks -->
     <string name="failed_writing">Veuillez vous assurer que vous disposez de suffisamment d\'espace de stockage.</string>
     <string name="permission_denied_writing">Une erreur inattendue s\'est produite lors de l\'enregistrement du fichier des heures de prière, veuillez redémarrer l\'application et vérifier les mises à jour.</string>
@@ -334,7 +337,6 @@ Vous pouvez faire un don en utilisant [DONATION_LINK].<br/><br/>
     <string name="silent_schedule_success">Programmation quotidienne réussie.</string>
     <string name="monthly_update">MàJ des horaires de prière pour ce mois %1$s.</string>
     <string name="monthly_update_default_method">MàJ des horaires de prière pour ce mois %1$s en utilisant la méthode par défaut.</string>
-    <string name="speed">You travelled at %1$s km/h.</string>
 
     <string name="worker_failed">Worker failed.</string>
     <string name="process_prayer">Process prayer times</string>
