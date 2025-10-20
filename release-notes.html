@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Release Notes - Prayer mode</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 15px;
+            color: #333;
+        }
+        @media (prefers-color-scheme: dark) {
+            body {
+                color: #ddd;
+                background-color: #1a1a1a;
+            }
+            h1, h2, h3 {
+                color: #ADD8E6;
+            }
+            a {
+                color: #ADD8E6;
+            }
+            .version-card {
+                background-color: #2d2d2d;
+                border-left: 4px solid #ADD8E6;
+            }
+        }
+        h1, h2, h3 {
+            color: #215BA0;
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
+        }
+        h1 { font-size: 2em; }
+        h2 { font-size: 1.5em; }
+        h3 { font-size: 1.2em; }
+        ul {
+            list-style-type: disc;
+            margin-left: 25px;
+            margin-bottom: 1em;
+        }
+        ul li { margin-bottom: 0.5em; }
+        strong { font-weight: bold; color: inherit; }
+        p { margin-bottom: 1em; }
+        a { color: #215BA0; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .header-container h1 {
+            margin: 0;
+            font-size: 1.5em;
+            color: inherit;
+        }
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            font-size: 1em;
+            white-space: nowrap;
+        }
+        .nav-links .current-page {
+            font-weight: bold;
+            text-decoration: none;
+            cursor: default;
+            color: #555;
+        }
+        .version-card {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #215BA0;
+        }
+        .version-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        .version-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #215BA0;
+            margin: 0;
+        }
+        .version-date {
+            color: #666;
+            font-style: italic;
+        }
+        .feature-list {
+            margin: 15px 0;
+        }
+        .feature-list li {
+            margin-bottom: 8px;
+            padding-left: 5px;
+        }
+        @media (prefers-color-scheme: dark) {
+            .nav-links .current-page { color: #aaa; }
+            strong { color: #eee; }
+            .version-date { color: #aaa; }
+        }
+        .download-section {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #e8f4fd;
+            border-radius: 8px;
+        }
+        @media (prefers-color-scheme: dark) {
+            .download-section {
+                background-color: #1e3a5f;
+            }
+        }
+        .download-button {
+            display: inline-block;
+            background-color: #215BA0;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 10px;
+            transition: background-color 0.3s;
+        }
+        .download-button:hover {
+            background-color: #1a4780;
+            text-decoration: none;
+            color: white;
+        }
+        @media (prefers-color-scheme: dark) {
+            .download-button {
+                background-color: #ADD8E6;
+                color: #1a1a1a;
+            }
+            .download-button:hover {
+                background-color: #8bc7e0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header-container">
+    <h1>Release Notes - Prayer mode</h1>
+    <div class="nav-links">
+        <a href="https://prayermode.github.io/apk/">Home</a>
+        <a href="terms.html">Terms of Use</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="help.html">Help</a>
+        <span class="current-page">Release Notes</span>
+    </div>
+</div>
+
+<div class="download-section">
+    <h2>Download Latest Version</h2>
+    <p>Get the most recent version of Prayer mode with all the latest features and improvements.</p>
+    <a href="https://prayermode.github.io/apk/prayer-mode.apk" class="download-button">Download Prayer Mode</a>
+</div>
+
+<h2>Version History</h2>
+
+<div class="version-card">
+    <div class="version-header">
+        <h3 class="version-title">Version 1.1</h3>
+        <span class="version-date">Latest Release</span>
+    </div>
+    <div class="feature-list">
+        <ul>
+            <li><strong>New Feature:</strong> Added audio takbir for prayer notifications</li>
+            <li><strong>Improvements:</strong> Minor bug fixes and stability improvements</li>
+            <li><strong>Optimization:</strong> Code optimization for better performance</li>
+            <li><strong>Enhanced:</strong> Smoother user experience</li>
+        </ul>
+    </div>
+</div>
+
+<div class="version-card">
+    <div class="version-header">
+        <h3 class="version-title">Version 1.0</h3>
+        <span class="version-date">Initial Release</span>
+    </div>
+    <div class="feature-list">
+        <ul>
+            <li><strong>Core Feature:</strong> Auto-silence mode during prayer times</li>
+            <li><strong>Location-based:</strong> Accurate prayer times based on your current location</li>
+            <li><strong>Automatic:</strong> No manual setup required - works automatically</li>
+            <li><strong>Reliable:</strong> Precise calculation of prayer times</li>
+        </ul>
+    </div>
+</div>
+
+<h3>Upcoming Features</h3>
+<p>We're constantly working to improve Prayer mode. Thank you for using our app.</p>
+
+<h3>Need Help?</h3>
+<p>If you encounter any issues or have suggestions for improvement, please contact us at <a href="mailto:prayer.mode@outlook.com">prayer.mode@outlook.com</a></p>
+
+</body>
+</html>
