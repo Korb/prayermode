@@ -871,6 +871,9 @@
 
             .nav-links.active {
                 display: flex; /* Show when active */
+				max-height: calc(100vh - 60px); /* Max height is viewport height minus header height (approx. 60px) */
+        overflow-y: auto; /* Enable vertical scrolling if content exceeds max-height */
+        -webkit-overflow-scrolling: touch; /* Improved scrolling performance on iOS */
             }
 
             .nav-links li {
@@ -1637,6 +1640,7 @@
   </script>
 </body>
 </html>
+
 
 
 
