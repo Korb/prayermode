@@ -85,14 +85,35 @@
             color: var(--accent);
         }
 
-        /* Logo/Title for Mobile View */
-        .logo-mobile {
-            display: none; 
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: white;
-            font-family: 'Playfair Display', serif;
-        }
+/* Logo/Title for Mobile View */
+.logo-mobile {
+    display: none; 
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: white;
+    font-family: 'Playfair Display', serif;
+    /* Added alignment for the tagline */
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1; /* Adjust spacing */
+}
+
+/* NEW CSS for the Tagline */
+.logo-tagline {
+    font-size: 0.7rem; /* Make it small */
+    font-style: italic; /* Make it italic */
+    font-weight: 400;
+    opacity: 0.8; /* Slightly fade it out */
+    font-family: 'Poppins', sans-serif; /* Use the body font for legibility */
+}
+
+/* Ensure the logo-mobile is displayed on smaller screens */
+@media (max-width: 992px) {
+    .logo-mobile {
+        display: flex; /* Changed from block to flex for column alignment */
+        margin-left: 1rem;
+    }
+}
         
         .nav-links {
             display: flex;
@@ -1096,7 +1117,12 @@
                 <div class="menu-toggle" id="menu-toggle">
                     <i class="fas fa-bars"></i>
                 </div>
-                <div class="logo-mobile">Prayer mode</div>
+                <div class="logo-mobile">
+				    Prayer mode
+ 				   <span class="logo-tagline">
+  				    Ideas that come true for a better life
+  				  </span>
+				</div>
 
                 <ul class="nav-links" id="mobile-menu">
 					<li><a href="#hero">Introduction</a></li>
@@ -1611,4 +1637,5 @@
   </script>
 </body>
 </html>
+
 
