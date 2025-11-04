@@ -2,6 +2,7 @@ package com.yahyaoui.prayermode
 
 import android.app.Dialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +16,7 @@ import androidx.core.net.toUri
 import android.graphics.Color
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
+import android.view.KeyEvent
 import androidx.core.graphics.drawable.toDrawable
 
 class TermsAndConditions : DialogFragment() {
@@ -40,6 +42,11 @@ class TermsAndConditions : DialogFragment() {
         if (context is TermsAndConditionsListener) listener = context
         else throw ClassCastException("$context must implement TermsAndConditionsListener")
         sharedHelper = SharedHelper(context)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        isCancelable = false
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -86,7 +93,16 @@ class TermsAndConditions : DialogFragment() {
         val dialog = super.onCreateDialog(savedInstanceState)
         dialog.setCancelable(false)
         dialog.setCanceledOnTouchOutside(false)
+        dialog.setOnKeyListener { _, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP) {
+                return@setOnKeyListener true
+            }
+            false
+        }
         dialog.window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
         return dialog
+    }
+
+    override fun onCancel(dialog: DialogInterface) {
     }
 }
