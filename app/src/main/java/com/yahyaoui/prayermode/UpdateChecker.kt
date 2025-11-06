@@ -10,6 +10,7 @@ import org.json.JSONObject
 import java.net.URL
 import androidx.core.net.toUri
 import android.app.*
+import android.content.pm.InstallSourceInfo
 import android.os.Build
 import androidx.core.app.NotificationCompat
 
@@ -63,6 +64,10 @@ class UpdateChecker(private val context: Context) {
     suspend fun checkForUpdate() {
         if (BuildConfig.DEBUG) Log.d(tag, "Checking for updates...")
         val latestVersion = getLatestVersion() ?: return
+        if (isInstalledFromFdroid()) {
+            if (BuildConfig.DEBUG) Log.d(tag, "Skipping update check - installed from F-Droid")
+            return
+        }
         val currentVersion = getCurrentVersionCode()
         if (BuildConfig.DEBUG) Log.d(tag, "Current: $currentVersion, Latest: ${latestVersion.versionCode}")
         if (latestVersion.versionCode > currentVersion) {
@@ -70,6 +75,30 @@ class UpdateChecker(private val context: Context) {
             showUpdateNotification(latestVersion)
         } else {
             if (BuildConfig.DEBUG) Log.d(tag, "Already on latest version")
+        }
+    }
+    private fun isInstalledFromFdroid(): Boolean {
+        val knownFdroidInstallers = listOf("org.fdroid.fdroid", "org.fdroid.fdroid.privileged", "com.fdroid", "fdroid")
+        return try {
+            val packageName = context.packageName
+            val packageManager = context.packageManager
+            val installerPackageName = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                val installSourceInfo: InstallSourceInfo? = packageManager.getInstallSourceInfo(packageName)
+                installSourceInfo?.installingPackageName
+            } else {
+                @Suppress("DEPRECATION")
+                packageManager.getInstallerPackageName(packageName)
+            }
+            if (BuildConfig.DEBUG) Log.d(tag, "Installer package detected: $installerPackageName")
+
+            installerPackageName?.let { installer ->
+                knownFdroidInstallers.any { known ->
+                    installer.equals(known, ignoreCase = true) || (known.length > 3 && installer.contains(known, ignoreCase = true))
+                }
+            } ?: false
+        } catch (e: Exception) {
+            Log.e(tag, "Error checking installer package: ${e.message}")
+            false
         }
     }
 
