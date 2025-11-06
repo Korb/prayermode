@@ -16,8 +16,8 @@ class MyApp : Application() {
     }
     private fun scheduleWeeklyUpdateCheck() {
         val updateRequest = PeriodicWorkRequestBuilder<UpdateCheckWorker>(
-            7, TimeUnit.DAYS, // Repeat every 7 days
-            1, TimeUnit.HOURS // Flexible interval of 1 hour
+            7, TimeUnit.DAYS,
+            1, TimeUnit.HOURS
         ).build()
 
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(

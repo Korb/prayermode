@@ -18,7 +18,7 @@ class UpdateCheckWorker(context: Context, params: WorkerParameters) : CoroutineW
             return Result.success()
         } catch (e: Exception) {
             Log.e(tag, "Error during weekly update check: ${e.message}")
-            return Result.retry() // Or Result.failure() depending on your preference
+            return Result.retry()
         }
     }
 }
