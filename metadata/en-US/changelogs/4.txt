@@ -1,4 +1,4 @@
-Global Reach: Added Spanish language support
 Performance: Optimized audio playback and timing
-Reliability: Fixed DND activation delays
 Enhanced Settings: Added new duration options for Friday prayer
+Global Reach: Added Spanish language support
+Improvements: Minor bug fixes and stability improvements
